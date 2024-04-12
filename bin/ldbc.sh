@@ -19,10 +19,4 @@ cd ${GIE_HOME}
 RUST_LOG=info DATA_PATH=${DATA}/bi30_bin_p1 ./start_rpc_server --config=${CONFIG}/engine.config &
 
 # Determine the LDBC test to run based on orderValue
-if [[ "$orderValue" == "GOpt" ]]; then
-    java -cp ".:${GIE_HOME}/lib/*" org.apache.calcite.plan.volcano.LDBCGOptTest &
-elif [[ "$orderValue" == "Random" ]]; then
-    java -cp ".:${GIE_HOME}/lib/*" org.apache.calcite.plan.volcano.LDBCRandomTest &
-else 
-    java -cp ".:${GIE_HOME}/lib/*" org.apache.calcite.plan.volcano.LDBCNeo4jTest &
-fi
+java -cp ".:${GIE_HOME}/lib/*" -Dorder=$orderValue org.apache.calcite.plan.volcano.LDBCTest
