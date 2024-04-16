@@ -11,26 +11,32 @@ As delineated in the paper, the experimental analysis is divided into two segmen
 The experiments on a smaller scale were carried out on a single machine powered by dual Intel Xeon E5-2620 v4 CPUs (boasting 8 cores and operating at a 2.1GHz clock speed), 512GB of memory, and a 1TB disk. This setup employs 32 threads for execution.
 
 #### Dataset
-For these experiments, we utilized the G30 dataset, which includes 89 million vertices and 541 million edges. This dataset has been preprocessed into a binary format compatible with the GIE system. The entire dataset is approximately 40GB in size and is readily available within the provided docker image. A convenient one-click script is included for loading and testing the dataset.
+For these experiments, we utilized the G30 dataset, which includes 89 million vertices and 541 million edges. This dataset has been preprocessed into a binary format compatible with the GIE system. The entire dataset is approximately 40GB in size, a convenient one-click script is included for loading the dataset from remote oss to the docker container:
+```bash
+cd ${GIE_HOME}/scripts
+./load_data.sh
+```
 
 #### Environment
 To facilitate the experiments, a docker image incorporating all necessary binary dependencies, scripts, and the dataset itself is provided. To initiate an experimental container, execute the following command:
 ```bash
-docker run --name=gopt_test -it registry.cn-hongkong.aliyuncs.com/graphscope/graphscope-dev:gopt /bin/bash
+docker run --name=gopt_bench -it registry.cn-hongkong.aliyuncs.com/graphscope/gopt-bench:v0.0.1 /bin/bash
 ```
 
-Within the `/home/graphscope/gopt` directory of the container, you will find:
+Within the `/home/graphscope/GIE` directory of the container, you will find:
 ```bash
-├── bin # scripts to run the experiments
-│   ├── cbo.sh
-│   ├── ldbc.sh
-│   ├── rbo.sh
-│   └── type_inference.sh
-├── configs # configuration files to initiate the GIE system
-│   └── ir.compiler.properties
-├── data  # dataset
-│   └── G30
-└── lib # binary dependencies, including some jar files
+├── bin # binaries to start the GIE system
+├── config # configuration files to start the GIE system
+│   ├── compiler
+│   └── engine
+├── libs # binary dependencies, including some jar files
+└── scripts # scripts to run the experiments
+    ├── cbo.sh
+    ├── kill.sh
+    ├── ldbc.sh
+    ├── load_data.sh
+    ├── rbo.sh
+    └── type_inference.sh
 ```
 
 ### Evaluation
@@ -38,6 +44,7 @@ Within the `/home/graphscope/gopt` directory of the container, you will find:
 #### Type Inference
 The performance impact of enabling or disabling type inference optimization within the GIE system is assessed. To replicate these experiment results, use the commands below with the --opt with/without flag determining the state of type inference optimization:
 ```bash
+cd {GIE_HOME}/scripts
 ./type_inference.sh --opt with
 ```
 ```bash
