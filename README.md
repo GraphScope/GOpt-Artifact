@@ -114,3 +114,82 @@ plan id [2], latency: [4786] ms
 ```
 
 ## Scalability Experiments
+
+In our study, we explored the optimization effects of GOpt on large-scale datasets from two perspectives: 
+1. Data Scale: observing how query latency changes with a linear increase in data volume; 
+2. Scale up: examining the alterations in query latency as the number of threads on a single machine increases.
+
+### Settings
+
+#### Hardware
+
+Our experiments were conducted on a robust cluster of 16 interconnected machines. Each machine is configured to support 2 threads and is outfitted with dual Intel Xeon E5-2620 v4 CPUs (featuring 8 cores and a clock speed of 2.1GHz), supplemented by 512GB of memory and a 1TB disk for storage.
+
+#### Dataset
+
+We engaged four distinct LDBC datasets for our experiments: G30, G100, G300, G1000. To facilitate the distribution across our hardware setup, these datasets were divided into 16 partitions employing the edge-cut strategy. Consequently, each physical machine handled one data partition, simultaneously accessed by two threads. To streamline the process, we offer a straightforward script enabling the download of data directly from remote oss to each physical machine, transferring it into the docker container via docker volume. Utilize the script below to download the G30 data of 16 partitions to the `/tmp/data` directory on the respective physical machine:
+
+```bash
+cd ${GIE_HOME}/scripts/distributed
+./deploy.sh hosts ./load_data.sh G30
+```
+
+The network addresses of the 16 machines can be configured in the `hosts` file:
+
+```bash
+100.12.13.14
+100.13.13.15
+100.13.13.16
+...
+```
+
+#### Environment
+
+To conduct our large-scale experiments, we utilized the `gopt_bench` docker container to deploy the GIE system. Furthermore, we've prepared scripts to simulate a 16-node cluster environment on physical machines. To initiate the cluster, follow the steps outlined below:
+
+1. Define the network addresses of the 16 machines in the `hosts` file:
+
+    ```bash
+    100.12.13.14
+    100.13.13.15
+    100.13.13.16
+    ...
+    ```
+2. Activate the GIE system on each machine, specifying the dataset for use (e.g., G30):
+
+    ```bash
+    ./deploy_async.sh hosts ./start_executor.sh G30
+    ```
+
+    Once these steps are completed, the GIE System is operational, ready for large-scale experimentation as detailed in the Evaluation section.
+
+3. Before switching datasets, ensure to halt the GIE system across all nodes:
+
+    ```bash
+    ./deploy.sh hosts ./stop_executor.sh G30
+    ```
+
+### Evaluation
+
+#### Data Scale & Scale Up
+
+Our evaluation focused on the variations in query latency as we transitioned among different datasets or thread numbers. For this purpose, we employed the [LDBC Query Set](https://github.com/ldbc/ldbc_snb_interactive_v1_impls/tree/main/cypher/queries). 
+
+While comprehensive scripts for independently reproducing Data Scale and Scale Up performance are not provided, owing to dataset-specific configurations required at system startup, we offer detailed scripts enabling performance assessment for specified queries within a given dataset. By default, the performance metrics reflect the query’s execution under GOpt's optimal plan. However, the `--alternative` option allows for performance comparison under various sub-optimal plans, supporting reproducibility of results discussed in our paper. Here's how to use the scripts:
+
+To assess the performance of query IC6 under GOpt's optimal plan:
+```bash
+./scale_latency.sh --query=Q_IC_6
+```
+
+For evaluating the performance of IC6 under an alternative plan (plan1):
+```bash
+./scale_latency.sh --query=Q_IC_6 --alternative=plan1
+```
+
+Expected output for these commands:
+```bash
+query: [Q_IC_6][GOpt], latency: [XX] ms
+query: [Q_IC_6][plan1], latency: [XX] ms
+query: [Q_IC_6][plan2], latency: [XX] ms
+```
