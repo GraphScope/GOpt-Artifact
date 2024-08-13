@@ -23,16 +23,16 @@ sleep 2m
 
 graph_schema=${GIE_HOME}/config/compiler/ldbc_schema.json
 physical_opt_config=proto
-graph_planner_cbo_glogue_schema=${GIE_HOME}/config/compiler/ldbc30_statistics.txt
+graph_planner_cbo_glogue_schema=${GIE_HOME}/config/compiler/ldbc30_statistics.json
 graph_planner_opt=CBO
 
 # Determine the CBO test to run based on orderValue
 java \
   -cp ".:${GIE_HOME}/libs/*" \
   -Dgraph.schema=${graph_schema} \
-  -Dphysical.opt.config=${physical_opt_config} \
+  -Dgraph.physical.opt=${physical_opt_config} \
   -Dgraph.planner.opt=${graph_planner_opt} \
-  -Dgraph.planner.cbo.glogue.schema=${graph_planner_cbo_glogue_schema} \
+  -Dgraph.statistics=${graph_planner_cbo_glogue_schema} \
   -Dconfig=${CONFIG}/compiler/compiler.properties \
   -Dquery=${QUERY}/cbo \
   -Dorder=${orderValue} \
