@@ -33,6 +33,7 @@ Within the `/home/graphscope/GIE` directory of the container, you will find:
 ├── libs # binary dependencies, including some jar files
 └── scripts # scripts to run the experiments
     ├── cbo.sh
+    ├── job.sh
     ├── kill.sh
     ├── ldbc.sh
     ├── load_data.sh
@@ -127,10 +128,10 @@ For further evaluation on real-world queries, we tested the performance with JOB
 ```
 The resultant performance metrics are presented as follows:
 ```
-*************[JOB_1]*************
-plan id [0], latency: [1927] ms
-plan id [1], latency: [532] ms
-plan id [2], latency: [4786] ms
+*******************************************[1a.cypher]*******************************************
+plan id [0], latency [138] ms
+plan id [1], latency [3424] ms
+plan id [2], latency [22338] ms
 ...
 ```
 
