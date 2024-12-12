@@ -1,5 +1,11 @@
 # GOpt Artifacts
-This repository contains the artifacts related to the paper titled "A Graph-Native Query Optimization Framework". We offer a comprehensive set of resources to replicate the experiments detailed in the paper. These resources encompass the necessary environment, datasets, and scripts required for executing the experiments.
+
+This repository contains the artifacts related to the paper titled "A Modular Graph-Native Query Optimization Framework".
+
+Firstly, it includes supplementary material which primarily consists of two additional components: (1) Supplementary execution plans for the GOpt paper experiments, including the a case study on LDBC queries and execution plans for QC queries; and (2) Detailed information about the unified intermediate representation (GIR) used in GOpt.
+Please refer to the [supplementary_material.pdf](https://github.com/GraphScope/GOpt-Artifact/blob/main/supplementary_material.pdf).
+
+Secondly, we offer a comprehensive set of resources to replicate the experiments detailed in the paper. These resources encompass the necessary environment, datasets, and scripts required for executing the experiments.
 
 As delineated in the paper, the experimental analysis is divided into two segments: small-scale experiments and scalability experiments. The small-scale experiments aim to assess GOpt's performance on a single-machine setup using the G30 dataset and the IMDB dataset. Evaluations cover various aspects such as type inference efficiency, the efficacy of heuristic rules, cost-based optimization strategies, and optimization of LDBC queries on G30, and JOB on IMDB. In contrast, the scalability experiments focus on examining GOpt's performance across large-scale graphs (ranging from G30 to G1000) within a robust 16-machine cluster environment.
 
